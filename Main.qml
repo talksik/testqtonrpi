@@ -2,29 +2,44 @@ import QtQuick
 import QtQuick.VirtualKeyboard
 
 Window {
-    id: window
-    width: 640
-    height: 480
+    id: root
     visible: true
-    title: qsTr("Hello World")
 
-    Text {
-        text: "Yo yo what's up"
+    // Container element for rotating
+    Rectangle {
+        id: main
+        // Swap the width and height of the root item
+        width: root.height
+        height: root.width
+        anchors.centerIn: parent
+        // Rotate 90 degrees clockwise around transformOrigin
+        rotation: 90
+        // The rotated content
+        Text {
+            text: qsTr("Hello World")
+            anchors.centerIn: parent
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                Qt.quit();
+            }
+        }
     }
 
     InputPanel {
         id: inputPanel
         z: 99
         x: 0
-        y: window.height
-        width: window.width
+        y: root.height
+        width: root.width
 
         states: State {
             name: "visible"
             when: inputPanel.active
             PropertyChanges {
                 target: inputPanel
-                y: window.height - inputPanel.height
+                y: root.height - inputPanel.height
             }
         }
         transitions: Transition {
