@@ -1,5 +1,7 @@
 import QtQuick
 import QtQuick.VirtualKeyboard
+import QtQuick.Controls
+import QtQuick.Layouts
 
 Window {
     id: root
@@ -14,43 +16,47 @@ Window {
         anchors.centerIn: parent
         // Rotate 90 degrees clockwise around transformOrigin
         rotation: 90
-        // The rotated content
-        Text {
-            text: qsTr("Hello World")
+
+        ColumnLayout {
+            id: column
             anchors.centerIn: parent
-        }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                Qt.quit();
+
+            Text {
+                text: qsTr("Hello World")
+            }
+            RoundButton {
+                text: "Show keyboard"
+                onClicked: {
+                    inputPanel.active = !inputPanel.active
+                }
             }
         }
-    }
 
-    InputPanel {
-        id: inputPanel
-        z: 99
-        x: 0
-        y: root.height
-        width: root.width
+        InputPanel {
+            id: inputPanel
+            z: 99
+            x: 0
+            y: parent.height
+            width: parent.width
 
-        states: State {
-            name: "visible"
-            when: inputPanel.active
-            PropertyChanges {
-                target: inputPanel
-                y: root.height - inputPanel.height
+            states: State {
+                name: "visible"
+                when: inputPanel.active
+                PropertyChanges {
+                    target: inputPanel
+                    y: parent.height - inputPanel.height
+                }
             }
-        }
-        transitions: Transition {
-            from: ""
-            to: "visible"
-            reversible: true
-            ParallelAnimation {
-                NumberAnimation {
-                    properties: "y"
-                    duration: 250
-                    easing.type: Easing.InOutQuad
+            transitions: Transition {
+                from: ""
+                to: "visible"
+                reversible: true
+                ParallelAnimation {
+                    NumberAnimation {
+                        properties: "y"
+                        duration: 250
+                        easing.type: Easing.InOutQuad
+                    }
                 }
             }
         }
